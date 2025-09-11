@@ -1,2 +1,3 @@
-web: bin/rails server -p $PORT -e production
-release: bin/rails db:migrate
+web: bundle exec rails server -p $PORT -e production
+release: bundle exec rails db:migrate
+
