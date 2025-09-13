@@ -16,13 +16,12 @@ gem "rexml"
 
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
-  gem "rspec-rails"
+  gem "rspec-rails", "~> 6.0"
 end
 
 group :development do
   gem "web-console"
 end
 
-
-gem "brakeman"
-gem "rubocop"
+gem "brakeman", require: false
+gem "rubocop", require: false
