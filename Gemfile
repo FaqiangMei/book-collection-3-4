@@ -12,23 +12,18 @@ gem "jbuilder"
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 gem "bootsnap", require: false
 
-
 group :development, :test do
-  gem "sqlite3", "~> 1.4"
   gem "debug", platforms: %i[ mri windows ]
+  gem "pg", "~> 1.1"
+  gem "rspec-rails"
+  gem "rubocop", require: false
+  gem "brakeman", require: false
 end
 
 group :development do
   gem "web-console"
 end
 
-
 group :production do
   gem "pg", "~> 1.1"
-end
-
-group :development, :test do
-  gem 'rspec-rails'
-  gem 'rubocop', require: false
-  gem 'brakeman', require: false
 end
