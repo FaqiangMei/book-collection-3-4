@@ -1,14 +1,12 @@
+name: Rails tests
+
+on: [push, pull_request]
+
 env:
   RUBY_VERSION: 3.2.2
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password
-  DATABASE_USER: postgres
-  DATABASE_PASSWORD: password
   DB_HOST: postgres
-
-name: Rails tests
-
-on: [push, pull_request]
 
 jobs:
   rspec-test:
@@ -47,8 +45,7 @@ jobs:
           PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -c '\l'
 
       - name: Install dependencies
-        run: |
-          bundle install --jobs 4 --retry 3
+        run: bundle install --jobs 4 --retry 3
 
       - name: Setup DB
         run: |
