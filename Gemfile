@@ -14,6 +14,10 @@ gem "bootsnap", require: false
 gem "pg", "~> 1.1"
 gem "rexml"
 
+gem 'rspec-rails'
+gem 'brakeman'
+gem 'rubocop'
+
 group :development, :test do
   gem "debug", platforms: %i[ mri windows ]
   gem "rspec-rails", "~> 6.0"
@@ -23,5 +27,4 @@ group :development do
   gem "web-console"
 end
 
-gem "brakeman", require: false
-gem "rubocop", require: false
+
