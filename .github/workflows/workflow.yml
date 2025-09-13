@@ -1,12 +1,14 @@
-name: Rails tests
-
-on: [push, pull_request]
-
 env:
   RUBY_VERSION: 3.2.2
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password
+  DATABASE_USER: postgres
+  DATABASE_PASSWORD: password
   DB_HOST: postgres
+
+name: Rails tests
+
+on: [push, pull_request]
 
 jobs:
   rspec-test:
@@ -37,10 +39,16 @@ jobs:
           bundler-cache: true
 
       - name: Install postgres client
-        run: sudo apt-get install -y libpq-dev
+        run: sudo apt-get install -y libpq-dev postgresql-client
+
+      - name: Debug Postgres connection
+        run: |
+          echo "Testing connection to Postgres..."
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -c '\l'
 
       - name: Install dependencies
-        run: bundle install --jobs 4 --retry 3
+        run: |
+          bundle install --jobs 4 --retry 3
 
       - name: Setup DB
         run: |
@@ -52,7 +60,7 @@ jobs:
           cmd: install
 
       - name: Run tests
-        run: bundle exec rspec spec
+        run: bundle exec rspec .
 
       - name: Run brakeman
         run: brakeman -o brakeman.txt
