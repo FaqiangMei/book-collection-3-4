@@ -26,3 +26,9 @@ end
 group :production do
   gem "pg", "~> 1.1"
 end
+
+group :development, :test do
+  gem 'rspec-rails'
+  gem 'rubocop', require: false
+  gem 'brakeman', require: false
+end
