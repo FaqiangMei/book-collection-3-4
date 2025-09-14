@@ -80,4 +80,5 @@ jobs:
         if: always()
         with:
           name: brakeman-report.txt
-          path: brakeman.txt
+          path: brakeman.txt --no-exit-on-warn
+
