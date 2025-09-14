@@ -1,9 +1,18 @@
+env:
+  RUBY_VERSION: 3.2.2
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: password
+  DATABASE_USER: postgres
+  DATABASE_PASSWORD: password
+  DB_HOST: postgres
+
 name: Rails tests
 
 on: [push, pull_request]
 
 jobs:
   rspec-test:
+    name: RSpec
     runs-on: ubuntu-latest
 
     services:
@@ -12,19 +21,8 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      RUBY_VERSION: 3.2.2
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      DB_HOST: postgres
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v2
@@ -33,15 +31,18 @@ jobs:
         with:
           ruby-version: ${{ env.RUBY_VERSION }}
           bundler: 2.3.26
-          bundler-cache: true
+          bundler-cache: false
+
+      - name: Update RubyGems
+        run: gem update --system 3.5.21
 
       - name: Install postgres client
-        run: sudo apt-get install -y libpq-dev
+        run: sudo apt-get install -y libpq-dev postgresql-client
 
       - name: Install dependencies
         run: |
           gem install bundler -v 2.3.26
-          bundle install
+          bundle install --jobs 4 --retry 3
 
       - name: Create database
         run: |
@@ -62,22 +63,23 @@ jobs:
         run: bundle exec rubocop --force-exclusion vendor/*/** --out rubocop.txt
 
       - name: Upload coverage results
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: coverage-report
           path: coverage
 
       - name: Upload rubocop report
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: rubocop-report.txt
           path: rubocop.txt
 
       - name: Upload brakeman report
-        uses: actions/upload-artifact@master
+        uses: actions/upload-artifact@v4
         if: always()
         with:
           name: brakeman-report.txt
           path: brakeman.txt
+
