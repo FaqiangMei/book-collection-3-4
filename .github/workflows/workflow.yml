@@ -56,7 +56,7 @@ jobs:
         run: bundle exec rspec .
 
       - name: Run brakeman
-        run: brakeman -o brakeman.txt
+        run: brakeman -o brakeman.txt --no-exit-on-warn
 
       - name: Run rubocop
         run: bundle exec rubocop --force-exclusion vendor/*/** --out rubocop.txt
@@ -80,5 +80,5 @@ jobs:
         if: always()
         with:
           name: brakeman-report.txt
-          path: brakeman.txt --no-exit-on-warn
+          path: brakeman.txt
 
