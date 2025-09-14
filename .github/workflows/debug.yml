@@ -1,0 +1,36 @@
+name: Debug Postgres
+
+on: [push]
+
+jobs:
+  test-postgres:
+    runs-on: ubuntu-latest
+
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      DB_HOST: postgres
+
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Install postgres client
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Test connection to Postgres
+        run: |
+          echo "Testing Postgres service..."
+          sleep 10
+          PGPASSWORD=$POSTGRES_PASSWORD psql -h $DB_HOST -U $POSTGRES_USER -c '\l'
