@@ -2,8 +2,7 @@ env:
   RUBY_VERSION: 3.2.2
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: password
-  DATABASE_USER: postgres
-  DATABASE_PASSWORD: password
+  DB_HOST: localhost
 
 name: Rails tests
 
@@ -20,8 +19,13 @@ jobs:
         ports:
           - 5432:5432
         env:
-          POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
 
     steps:
       - uses: actions/checkout@v2
@@ -42,10 +46,12 @@ jobs:
         run: |
           gem install bundler -v 2.3.26
           bundle install --jobs 4 --retry 3
+
       - name: Create database
         run: |
           bundle exec rails db:create RAILS_ENV=test
           bundle exec rails db:migrate RAILS_ENV=test
+
       - uses: borales/actions-yarn@v3.0.0
         with:
           cmd: install
