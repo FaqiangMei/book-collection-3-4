@@ -1,0 +1,5 @@
+# Ensure OmniAuth middleware listens on the Devise admin scope.
+# This file is named with a leading 00_ so it loads before devise.rb
+# and ensures the path_prefix is in place when Devise registers providers.
+OmniAuth.config.path_prefix = '/admins/auth'
+Rails.logger.info "[omniauth] path_prefix set to #{OmniAuth.config.path_prefix}"

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>BookCollection34FaqiangMei</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      .flash { padding: 10px; margin: 10px 0; border-radius: 5px; }
+      .flash.notice { background-color: #d4edda; color: #155724; }   /* green */
+      .flash.alert  { background-color: #f8d7da; color: #721c24; }   /* red */
+      .flash.error  { background-color: #f8d7da; color: #721c24; }   /* red */
+      .flash.success { background-color: #d1ecf1; color: #0c5460; } /* blue */
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <% if admin_signed_in? %>
+        <p>Logged in as <%= current_admin.email %></p>
+        <%= button_to "Logout",
+                      destroy_admin_session_path,
+                      method: :delete,
+                      data: { turbo: "false" },
+                      class: "btn btn-secondary" %>
+      <% else %>
+        <%= button_to "Sign in with Google",
+                      admin_google_oauth2_omniauth_authorize_path,
+                      method: :post,
+                      data: { turbo: "false" },
+                      class: "btn btn-danger" %>
+      <% end %>
+      <hr>
+    </header>
+
+
+    <% flash.each do |key, message| %>
+      <div class="flash <%= key %>"><%= message %></div>
+    <% end %>
+
+    <%= yield %>
+  </body>
+</html>

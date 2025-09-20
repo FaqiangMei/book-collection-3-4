@@ -1,0 +1,32 @@
+# Ignore environment variable files
+.env
+*.env
+**/.env
+
+# Rails logs, temp, PID
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+/tmp/pids/*
+/tmp/cache/*
+/tmp/sockets/*
+
+# Byebug / Pry history
+.byebug_history
+.pry_history
+
+# Node modules (if using JS bundlers)
+node_modules/
+
+# Yarn / npm log files
+yarn-debug.log*
+npm-debug.log*
+
+# IDE / Editor files
+.vscode/
+.idea/
+*.swp
+
+# System files
+.DS_Store

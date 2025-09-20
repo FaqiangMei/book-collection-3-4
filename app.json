@@ -1,0 +1,15 @@
+{
+  "name": "Book Collection",
+  "description": "Book Collection Rails App",
+  "env": {
+    "RAILS_MASTER_KEY": {
+      "required": true
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "scripts": {
+    "postdeploy": "bin/rails db:prepare"
+  }
+}
